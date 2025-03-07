@@ -2,11 +2,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateAllocation, normalizeAllocations } from '../slices/timeAllocationSlice';
+import { calculateResourceChanges } from '../utils/resourceUtils';
+import { ACTIVITY_IMPACTS } from '../config/gameConstants';
+import Panel from './ui/Panel';
+import Slider from './ui/Slider';
+import Button from './ui/Button';
 
 function TimeAllocationPanel() {
   const dispatch = useDispatch();
   const timeAllocation = useSelector(state => state.timeAllocation);
   const [total, setTotal] = useState(100);
+  
+  // Calculate resource impacts based on current allocation
+  const resourceImpacts = calculateResourceChanges(timeAllocation);
   
   useEffect(() => {
     const newTotal = Object.values(timeAllocation).reduce((sum, val) => sum + val, 0);
@@ -21,96 +29,64 @@ function TimeAllocationPanel() {
     dispatch(normalizeAllocations());
   };
   
-  // Calculate impacts
-  const energyImpact = ((timeAllocation.rest * 0.5) - (timeAllocation.study * 0.2) - (timeAllocation.work * 0.3) - (timeAllocation.social * 0.1) - (timeAllocation.exercise * 0.2));
-  const stressImpact = ((timeAllocation.study * 0.2) + (timeAllocation.work * 0.3) - (timeAllocation.social * 0.1) - (timeAllocation.rest * 0.3) - (timeAllocation.exercise * 0.2));
-  const moneyImpact = (timeAllocation.work * 5);
-  const knowledgeImpact = (timeAllocation.study * 10);
-  const socialImpact = ((timeAllocation.social * 5) - (timeAllocation.study * 0.1));
+  // Map activities to their impact labels
+  const activityImpactLabels = {
+    study: 'K',
+    work: '$',
+    social: 'Soc',
+    rest: 'E',
+    exercise: 'S',
+  };
+  
+  // Get the primary impact for an activity
+  const getPrimaryImpact = (activity) => {
+    const impacts = ACTIVITY_IMPACTS[activity];
+    if (!impacts) return null;
+    
+    // Find the key with the highest absolute value
+    let primaryKey = null;
+    let maxAbsValue = 0;
+    
+    Object.entries(impacts).forEach(([key, value]) => {
+      const absValue = Math.abs(value);
+      if (absValue > maxAbsValue) {
+        maxAbsValue = absValue;
+        primaryKey = key;
+      }
+    });
+    
+    if (!primaryKey) return null;
+    
+    // Calculate the actual impact based on allocation percentage
+    return impacts[primaryKey] * (timeAllocation[activity] / 100);
+  };
   
   return (
-    <div className="panel">
-      <h2 className="panel-header">Time Allocation</h2>
-      
+    <Panel title="Time Allocation">
       <div className={total !== 100 ? 'error-text' : ''} style={{fontSize: '14px', marginBottom: '10px'}}>
-        Total: {total}% {total !== 100 && <button onClick={handleNormalize} style={{padding: '2px 6px', fontSize: '12px'}}>Balance</button>}
+        Total: {total}% {total !== 100 && (
+          <Button onClick={handleNormalize} size="small">
+            Balance
+          </Button>
+        )}
       </div>
       
-      <div className="slider-container">
-        <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
-          <span>Study: {timeAllocation.study}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>K: +{Math.round(knowledgeImpact)}</span>
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={timeAllocation.study}
-          onChange={(e) => handleAllocationChange('study', parseInt(e.target.value))}
-          className="slider"
-        />
-      </div>
-      
-      <div className="slider-container">
-        <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
-          <span>Work: {timeAllocation.work}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>$: +{Math.round(moneyImpact)}</span>
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={timeAllocation.work}
-          onChange={(e) => handleAllocationChange('work', parseInt(e.target.value))}
-          className="slider"
-        />
-      </div>
-      
-      <div className="slider-container">
-        <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
-          <span>Social: {timeAllocation.social}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>Soc: +{Math.round(socialImpact)}</span>
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={timeAllocation.social}
-          onChange={(e) => handleAllocationChange('social', parseInt(e.target.value))}
-          className="slider"
-        />
-      </div>
-      
-      <div className="slider-container">
-        <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
-          <span>Rest: {timeAllocation.rest}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>E: +{Math.round(energyImpact)}</span>
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={timeAllocation.rest}
-          onChange={(e) => handleAllocationChange('rest', parseInt(e.target.value))}
-          className="slider"
-        />
-      </div>
-      
-      <div className="slider-container">
-        <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
-          <span>Exercise: {timeAllocation.exercise}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>S: {Math.round(stressImpact)}</span>
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={timeAllocation.exercise}
-          onChange={(e) => handleAllocationChange('exercise', parseInt(e.target.value))}
-          className="slider"
-        />
-      </div>
-    </div>
+      {Object.keys(timeAllocation).map(activity => {
+        const impact = getPrimaryImpact(activity);
+        const impactLabel = activityImpactLabels[activity];
+        
+        return (
+          <Slider
+            key={activity}
+            label={activity.charAt(0).toUpperCase() + activity.slice(1)}
+            value={timeAllocation[activity]}
+            onChange={(value) => handleAllocationChange(activity, value)}
+            impact={impact}
+            impactLabel={impactLabel}
+          />
+        );
+      })}
+    </Panel>
   );
 }
 

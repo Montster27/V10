@@ -6,6 +6,7 @@ import ResourcePanel from './components/ResourcePanel';
 import TimeAllocationPanel from './components/TimeAllocationPanel';
 import EventPanel from './components/EventPanel';
 import SkillsPanel from './components/SkillsPanel';
+import Panel from './components/ui/Panel';
 import './components/skills.css';
 
 function App() {
@@ -30,10 +31,11 @@ function App() {
           {activeEvents.length > 0 ? (
             <EventPanel event={activeEvents[0]} />
           ) : (
-            <div className="panel">
-              <h2 className="panel-header">Events</h2>
-              <p style={{fontSize: '14px', color: '#666'}}>No active events. Events will appear here as they occur during gameplay.</p>
-            </div>
+            <Panel title="Events">
+              <p style={{fontSize: '14px', color: '#666'}}>
+                No active events. Events will appear here as they occur during gameplay.
+              </p>
+            </Panel>
           )}
         </div>
         

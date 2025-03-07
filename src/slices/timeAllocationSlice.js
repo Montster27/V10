@@ -1,13 +1,8 @@
 // /Users/montysharma/Documents/V10/simplified/src/slices/timeAllocationSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { DEFAULT_TIME_ALLOCATION } from '../config/gameConstants';
 
-const initialState = {
-  study: 20,
-  work: 20,
-  social: 20,
-  rest: 30,
-  exercise: 10,
-};
+const initialState = { ...DEFAULT_TIME_ALLOCATION };
 
 export const timeAllocationSlice = createSlice({
   name: 'timeAllocation',
@@ -19,12 +14,20 @@ export const timeAllocationSlice = createSlice({
         state[activity] = Math.max(0, Math.min(100, value));
       }
     },
+    updateMultipleAllocations: (state, action) => {
+      const allocations = action.payload;
+      Object.entries(allocations).forEach(([activity, value]) => {
+        if (activity in state) {
+          state[activity] = Math.max(0, Math.min(100, value));
+        }
+      });
+    },
     normalizeAllocations: (state) => {
       const total = Object.values(state).reduce((sum, val) => sum + val, 0);
       
       if (total === 0) {
         // If all values are 0, reset to default
-        return initialState;
+        return { ...DEFAULT_TIME_ALLOCATION };
       }
       
       if (total !== 100) {
@@ -48,6 +51,11 @@ export const timeAllocationSlice = createSlice({
   },
 });
 
-export const { updateAllocation, normalizeAllocations, resetAllocations } = timeAllocationSlice.actions;
+export const { 
+  updateAllocation, 
+  updateMultipleAllocations,
+  normalizeAllocations, 
+  resetAllocations 
+} = timeAllocationSlice.actions;
 
 export default timeAllocationSlice.reducer;

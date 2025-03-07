@@ -2,7 +2,10 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { togglePause } from '../slices/timeSlice';
-import { startGameLoop, stopGameLoop, saveGame } from '../services/gameLoop';
+import { initializeGameLoop, saveGame } from '../services/gameLoop';
+import { formatDate } from '../utils/timeUtils';
+import Panel from './ui/Panel';
+import Button from './ui/Button';
 
 function TimeControls() {
   const dispatch = useDispatch();
@@ -10,8 +13,11 @@ function TimeControls() {
   const skills = useSelector(state => state.skills);
   
   useEffect(() => {
-    startGameLoop();
-    return () => stopGameLoop();
+    // Initialize game loop when the component mounts
+    const cleanup = initializeGameLoop();
+    
+    // Clean up when component unmounts
+    return cleanup;
   }, []);
   
   const handleTogglePause = () => {
@@ -19,46 +25,47 @@ function TimeControls() {
   };
   
   const handleSaveGame = () => {
-    saveGame();
-    alert('Game saved!');
+    const success = saveGame();
+    if (success) {
+      alert('Game saved!');
+    } else {
+      alert('Error saving game. Please try again.');
+    }
   };
   
-  const formattedDate = new Date(time.date).toLocaleDateString('en-US', {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
+  const formattedDate = formatDate(time.date);
   
   return (
-    <div className="panel" style={{padding: '8px 12px', marginBottom: '15px'}}>
+    <Panel style={{padding: '8px 12px', marginBottom: '15px'}}>
       <div className="time-controls">
         <div style={{flex: 1}}>
           <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <span><strong>Day {time.day}</strong></span>
             <span style={{fontSize: '0.9rem'}}>{formattedDate}</span>
           </div>
-          <div style={{marginTop: '4px'}}>Skill Points: {Math.round(skills.points)}</div>
+          <div style={{marginTop: '4px'}}>
+            Skill Points: {Math.round(skills.points)}
+          </div>
         </div>
         
         <div style={{display: 'flex', gap: '8px'}}>
-          <button 
-            className="primary"
+          <Button 
             onClick={handleTogglePause}
-            style={{padding: '4px 12px'}}
+            primary={true}
+            size="small"
           >
             {time.paused ? 'Play' : 'Pause'}
-          </button>
+          </Button>
           
-          <button 
+          <Button 
             onClick={handleSaveGame}
-            style={{padding: '4px 12px'}}
+            size="small"
           >
             Save
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Panel>
   );
 }
 

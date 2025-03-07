@@ -1,12 +1,14 @@
 // /Users/montysharma/Documents/V10/simplified/src/slices/resourcesSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { RESOURCE_LIMITS } from '../config/gameConstants';
+import { calculateResourceChanges, applyResourceChanges } from '../utils/resourceUtils';
 
 const initialState = {
-  energy: { current: 100, max: 100 },
-  stress: { current: 0, max: 100 },
-  money: 500,
-  knowledge: 0,
-  social: 50,
+  energy: { current: RESOURCE_LIMITS.energy.initial, max: RESOURCE_LIMITS.energy.max },
+  stress: { current: RESOURCE_LIMITS.stress.initial, max: RESOURCE_LIMITS.stress.max },
+  money: RESOURCE_LIMITS.money.initial,
+  knowledge: RESOURCE_LIMITS.knowledge.initial,
+  social: RESOURCE_LIMITS.social.initial,
 };
 
 export const resourcesSlice = createSlice({
@@ -14,60 +16,43 @@ export const resourcesSlice = createSlice({
   initialState,
   reducers: {
     updateResources: (state, action) => {
-      const { energy, stress, money, knowledge, social } = action.payload;
+      const changes = action.payload;
+      const updatedResources = applyResourceChanges(state, changes);
       
-      if (energy !== undefined) {
-        state.energy.current = Math.max(0, Math.min(state.energy.max, state.energy.current + energy));
-      }
-      
-      if (stress !== undefined) {
-        state.stress.current = Math.max(0, Math.min(state.stress.max, state.stress.current + stress));
-      }
-      
-      if (money !== undefined) {
-        state.money = Math.max(0, state.money + money);
-      }
-      
-      if (knowledge !== undefined) {
-        state.knowledge = Math.max(0, state.knowledge + knowledge);
-      }
-      
-      if (social !== undefined) {
-        state.social = Math.max(0, state.social + social);
-      }
+      // Apply the updates to state
+      Object.entries(updatedResources).forEach(([key, value]) => {
+        state[key] = value;
+      });
     },
     applyDailyUpdate: (state, action) => {
       const { timeAllocation } = action.payload;
+      const changes = calculateResourceChanges(timeAllocation);
+      const updatedResources = applyResourceChanges(state, changes);
       
-      // Example resource updates based on time allocation
-      const energyChange = 
-        -timeAllocation.study * 0.2 +
-        -timeAllocation.work * 0.3 +
-        -timeAllocation.social * 0.1 +
-        timeAllocation.rest * 0.5 +
-        -timeAllocation.exercise * 0.2;
+      // Apply the updates to state
+      Object.entries(updatedResources).forEach(([key, value]) => {
+        state[key] = value;
+      });
+    },
+    setResourceValue: (state, action) => {
+      const { resource, value } = action.payload;
       
-      const stressChange = 
-        timeAllocation.study * 0.2 +
-        timeAllocation.work * 0.3 +
-        -timeAllocation.social * 0.1 +
-        -timeAllocation.rest * 0.3 +
-        -timeAllocation.exercise * 0.2;
-      
-      const moneyChange = timeAllocation.work * 5;
-      const knowledgeChange = timeAllocation.study * 10;
-      const socialChange = timeAllocation.social * 5 - (timeAllocation.study * 0.1);
-      
-      state.energy.current = Math.max(0, Math.min(state.energy.max, state.energy.current + energyChange));
-      state.stress.current = Math.max(0, Math.min(state.stress.max, state.stress.current + stressChange));
-      state.money = Math.max(0, state.money + moneyChange);
-      state.knowledge = Math.max(0, state.knowledge + knowledgeChange);
-      state.social = Math.max(0, state.social + socialChange);
+      if (resource in state) {
+        if (typeof state[resource] === 'object' && 'current' in state[resource]) {
+          const min = RESOURCE_LIMITS[resource]?.min || 0;
+          const max = state[resource].max;
+          state[resource].current = Math.max(min, Math.min(max, value));
+        } else {
+          const min = RESOURCE_LIMITS[resource]?.min || 0;
+          const max = RESOURCE_LIMITS[resource]?.max || Infinity;
+          state[resource] = Math.max(min, Math.min(max, value));
+        }
+      }
     },
     resetResources: () => initialState,
   },
 });
 
-export const { updateResources, applyDailyUpdate, resetResources } = resourcesSlice.actions;
+export const { updateResources, applyDailyUpdate, setResourceValue, resetResources } = resourcesSlice.actions;
 
 export default resourcesSlice.reducer;

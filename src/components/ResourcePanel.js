@@ -1,37 +1,14 @@
 // /Users/montysharma/Documents/V10/simplified/src/components/ResourcePanel.js
 import React from 'react';
 import { useSelector } from 'react-redux';
-
-function ResourceBar({ label, value, max, className }) {
-  // Round the values for display
-  const displayValue = Math.round(value);
-  const displayMax = Math.round(max);
-  
-  const percentage = (value / max) * 100;
-  
-  return (
-    <div style={{marginBottom: '8px'}}>
-      <div className="resource-label">
-        <span>{label}</span>
-        <span>{displayValue}/{displayMax}</span>
-      </div>
-      <div className={`resource-bar ${className}`}>
-        <div 
-          className="resource-bar-fill" 
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
-}
+import Panel from './ui/Panel';
+import ResourceBar from './ui/ResourceBar';
 
 function ResourcePanel() {
   const resources = useSelector(state => state.resources);
   
   return (
-    <div className="panel">
-      <h2 className="panel-header">Resources</h2>
-      
+    <Panel title="Resources">
       <ResourceBar 
         label="Energy" 
         value={resources.energy.current} 
@@ -62,7 +39,7 @@ function ResourcePanel() {
           <span style={{fontWeight: 'bold'}}>{Math.round(resources.social)}</span>
         </div>
       </div>
-    </div>
+    </Panel>
   );
 }
 
