@@ -32,14 +32,14 @@ function TimeAllocationPanel() {
     <div className="panel">
       <h2 className="panel-header">Time Allocation</h2>
       
-      <div className={total !== 100 ? 'error-text' : ''} style={{fontSize: '14px'}}>
+      <div className={total !== 100 ? 'error-text' : ''} style={{fontSize: '14px', marginBottom: '10px'}}>
         Total: {total}% {total !== 100 && <button onClick={handleNormalize} style={{padding: '2px 6px', fontSize: '12px'}}>Balance</button>}
       </div>
       
       <div className="slider-container">
         <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
           <span>Study: {timeAllocation.study}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>Knowledge +{Math.round(knowledgeImpact)}</span>
+          <span style={{color: '#666', fontSize: '12px'}}>K: +{Math.round(knowledgeImpact)}</span>
         </label>
         <input
           type="range"
@@ -54,7 +54,7 @@ function TimeAllocationPanel() {
       <div className="slider-container">
         <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
           <span>Work: {timeAllocation.work}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>Money +${Math.round(moneyImpact)}</span>
+          <span style={{color: '#666', fontSize: '12px'}}>$: +{Math.round(moneyImpact)}</span>
         </label>
         <input
           type="range"
@@ -69,7 +69,7 @@ function TimeAllocationPanel() {
       <div className="slider-container">
         <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
           <span>Social: {timeAllocation.social}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>Social +{Math.round(socialImpact)}</span>
+          <span style={{color: '#666', fontSize: '12px'}}>Soc: +{Math.round(socialImpact)}</span>
         </label>
         <input
           type="range"
@@ -84,7 +84,7 @@ function TimeAllocationPanel() {
       <div className="slider-container">
         <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
           <span>Rest: {timeAllocation.rest}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>Energy +{Math.round(energyImpact)}</span>
+          <span style={{color: '#666', fontSize: '12px'}}>E: +{Math.round(energyImpact)}</span>
         </label>
         <input
           type="range"
@@ -99,7 +99,7 @@ function TimeAllocationPanel() {
       <div className="slider-container">
         <label style={{display: 'flex', justifyContent: 'space-between', fontSize: '14px'}}>
           <span>Exercise: {timeAllocation.exercise}%</span>
-          <span style={{color: '#666', fontSize: '12px'}}>Stress {Math.round(stressImpact)}</span>
+          <span style={{color: '#666', fontSize: '12px'}}>S: {Math.round(stressImpact)}</span>
         </label>
         <input
           type="range"

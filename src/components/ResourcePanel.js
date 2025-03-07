@@ -10,7 +10,7 @@ function ResourceBar({ label, value, max, className }) {
   const percentage = (value / max) * 100;
   
   return (
-    <div>
+    <div style={{marginBottom: '8px'}}>
       <div className="resource-label">
         <span>{label}</span>
         <span>{displayValue}/{displayMax}</span>
@@ -46,24 +46,20 @@ function ResourcePanel() {
         className="resource-bar-stress"
       />
       
-      <div className="resource">
-        <div className="resource-label">
-          <span>Money</span>
-          <span>${Math.round(resources.money)}</span>
+      <div className="resource-details" style={{fontSize: '14px', marginTop: '12px'}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
+          <span>Money:</span>
+          <span style={{fontWeight: 'bold'}}>${Math.round(resources.money)}</span>
         </div>
-      </div>
-      
-      <div className="resource">
-        <div className="resource-label">
-          <span>Knowledge</span>
-          <span>{Math.round(resources.knowledge)}</span>
+        
+        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
+          <span>Knowledge:</span>
+          <span style={{fontWeight: 'bold'}}>{Math.round(resources.knowledge)}</span>
         </div>
-      </div>
-      
-      <div className="resource">
-        <div className="resource-label">
-          <span>Social</span>
-          <span>{Math.round(resources.social)}</span>
+        
+        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
+          <span>Social:</span>
+          <span style={{fontWeight: 'bold'}}>{Math.round(resources.social)}</span>
         </div>
       </div>
     </div>

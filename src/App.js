@@ -19,22 +19,33 @@ function App() {
         <TimeControls />
       </header>
       
-      <div className="compact-layout">
-        <div className="time-allocation-panel">
+      <div className="three-column-layout">
+        {/* Column 1: Time Allocation */}
+        <div className="column">
           <TimeAllocationPanel />
         </div>
         
-        <ResourcePanel />
-      
-        <div className="events-section">
-          {activeEvents.length > 0 && (
+        {/* Column 2: Events */}
+        <div className="column">
+          {activeEvents.length > 0 ? (
             <EventPanel event={activeEvents[0]} />
+          ) : (
+            <div className="panel">
+              <h2 className="panel-header">Events</h2>
+              <p style={{fontSize: '14px', color: '#666'}}>No active events. Events will appear here as they occur during gameplay.</p>
+            </div>
           )}
         </div>
         
-        <div className="skill-section">
-          <SkillsPanel />
+        {/* Column 3: Resources */}
+        <div className="column">
+          <ResourcePanel />
         </div>
+      </div>
+      
+      {/* Skills section below the three columns */}
+      <div className="skill-section">
+        <SkillsPanel />
       </div>
     </div>
   );

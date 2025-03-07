@@ -25,10 +25,10 @@ function EventPanel({ event }) {
   
   return (
     <div className="panel">
-      <h2 className="panel-header">Event</h2>
+      <h2 className="panel-header">Current Event</h2>
       <div className="event-content">
-        <h3 className="event-title">{event.title}</h3>
-        <p className="event-description">{event.description}</p>
+        <h3 className="event-title" style={{fontSize: '1.1rem', marginTop: '0'}}>{event.title}</h3>
+        <p className="event-description" style={{fontSize: '0.9rem', margin: '8px 0'}}>{event.description}</p>
         
         <div className="event-choices">
           {event.choices.map(choice => (
@@ -36,23 +36,24 @@ function EventPanel({ event }) {
               key={choice.id}
               onClick={() => handleChoiceSelect(choice.id)}
               className="event-choice"
+              style={{marginTop: '8px', fontSize: '0.9rem'}}
             >
               {choice.text}
               <div className="choice-effects">
                 {choice.effects.energy !== undefined && (
-                  <span>Energy: {choice.effects.energy > 0 ? '+' : ''}{Math.round(choice.effects.energy)}</span>
+                  <span>E: {choice.effects.energy > 0 ? '+' : ''}{Math.round(choice.effects.energy)}</span>
                 )}
                 {choice.effects.stress !== undefined && (
-                  <span>Stress: {choice.effects.stress > 0 ? '+' : ''}{Math.round(choice.effects.stress)}</span>
+                  <span>S: {choice.effects.stress > 0 ? '+' : ''}{Math.round(choice.effects.stress)}</span>
                 )}
                 {choice.effects.money !== undefined && (
-                  <span>Money: ${choice.effects.money > 0 ? '+' : ''}{Math.round(choice.effects.money)}</span>
+                  <span>$: {choice.effects.money > 0 ? '+' : ''}{Math.round(choice.effects.money)}</span>
                 )}
                 {choice.effects.knowledge !== undefined && (
-                  <span>Know: {choice.effects.knowledge > 0 ? '+' : ''}{Math.round(choice.effects.knowledge)}</span>
+                  <span>K: {choice.effects.knowledge > 0 ? '+' : ''}{Math.round(choice.effects.knowledge)}</span>
                 )}
                 {choice.effects.social !== undefined && (
-                  <span>Social: {choice.effects.social > 0 ? '+' : ''}{Math.round(choice.effects.social)}</span>
+                  <span>Soc: {choice.effects.social > 0 ? '+' : ''}{Math.round(choice.effects.social)}</span>
                 )}
               </div>
             </button>

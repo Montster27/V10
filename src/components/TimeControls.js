@@ -24,31 +24,39 @@ function TimeControls() {
   };
   
   const formattedDate = new Date(time.date).toLocaleDateString('en-US', {
-    weekday: 'long',
+    weekday: 'short',
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric'
   });
   
   return (
-    <div className="panel">
+    <div className="panel" style={{padding: '8px 12px', marginBottom: '15px'}}>
       <div className="time-controls">
-        <div>
-          <div><strong>Day {time.day}</strong></div>
-          <div>{formattedDate}</div>
-          <div>Skill Points: {Math.round(skills.points)}</div>
+        <div style={{flex: 1}}>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <span><strong>Day {time.day}</strong></span>
+            <span style={{fontSize: '0.9rem'}}>{formattedDate}</span>
+          </div>
+          <div style={{marginTop: '4px'}}>Skill Points: {Math.round(skills.points)}</div>
         </div>
         
-        <button 
-          className="primary"
-          onClick={handleTogglePause}
-        >
-          {time.paused ? 'Play' : 'Pause'}
-        </button>
-        
-        <button onClick={handleSaveGame}>
-          Save Game
-        </button>
+        <div style={{display: 'flex', gap: '8px'}}>
+          <button 
+            className="primary"
+            onClick={handleTogglePause}
+            style={{padding: '4px 12px'}}
+          >
+            {time.paused ? 'Play' : 'Pause'}
+          </button>
+          
+          <button 
+            onClick={handleSaveGame}
+            style={{padding: '4px 12px'}}
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );
