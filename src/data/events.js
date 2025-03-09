@@ -159,24 +159,4 @@ export const events = [
   },
 ];
 
-/**
- * Get available events for the current game state
- * 
- * @param {Object} gameState - Current game state
- * @returns {Array} - Available events
- */
-export function getAvailableEvents(gameState) {
-  const { day, resources, skills } = gameState;
-  
-  return events.filter(event => {
-    // Check time-based triggers
-    if (event.trigger.type === 'time' && event.trigger.day === day) {
-      return true;
-    }
-    
-    // Resource threshold triggers could be added here
-    // Skill-based triggers could be added here
-    
-    return false;
-  });
-}
+// getAvailableEvents function has been removed as it's not used in the application

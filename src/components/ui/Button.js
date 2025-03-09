@@ -1,47 +1,41 @@
 // /Users/montysharma/Documents/V10/simplified/src/components/ui/Button.js
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button as ChakraButton } from '@chakra-ui/react';
 
 /**
- * Reusable button component
+ * Custom button component using Chakra UI
+ * with game-specific styling
  */
-function Button({
-  children,
-  onClick,
-  primary = false,
-  disabled = false,
-  size = 'medium',
-  style = {},
-  className = '',
+function Button({ 
+  children, 
+  variant = 'solid', 
+  colorScheme = 'brand',
+  size = 'md',
+  isFullWidth = false,
+  ...props 
 }) {
-  const sizeClass = {
-    small: { padding: '2px 8px', fontSize: '0.8rem' },
-    medium: { padding: '6px 12px', fontSize: '0.9rem' },
-    large: { padding: '8px 16px', fontSize: '1rem' },
-  }[size];
-  
-  const baseClassName = primary ? 'primary' : '';
-  
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`${baseClassName} ${className}`}
-      style={{ ...sizeClass, ...style }}
+    <ChakraButton
+      variant={variant}
+      colorScheme={colorScheme}
+      size={size}
+      isFullWidth={isFullWidth}
+      borderRadius="md"
+      fontWeight="medium"
+      {...props}
     >
       {children}
-    </button>
+    </ChakraButton>
   );
 }
 
 Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-  primary: PropTypes.bool,
-  disabled: PropTypes.bool,
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
-  style: PropTypes.object,
-  className: PropTypes.string,
+  children: PropTypes.node,
+  variant: PropTypes.oneOf(['solid', 'outline', 'ghost', 'link']),
+  colorScheme: PropTypes.string,
+  size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg']),
+  isFullWidth: PropTypes.bool,
 };
 
 export default Button;

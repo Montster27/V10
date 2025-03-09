@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Middle Age Multiverse - Theme Tester</title>
+  <!-- Load fonts used by themes -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&family=VT323&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Basic styles for the page -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #root {
+      min-height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <!-- When running this standalone, you would need to bundle the app with a tool like webpack or use a CDN for development -->
+  <script type="module">
+    // This is a simplified setup for demonstration
+    // In a real project, you'd use a bundler like webpack
+    import React from 'https://esm.sh/react@18.2.0';
+    import ReactDOM from 'https://esm.sh/react-dom@18.2.0';
+    import { ChakraProvider, extendTheme } from 'https://esm.sh/@chakra-ui/react@2.8.0';
+    
+    // Notice: This simplified approach won't work directly due to module imports
+    // This HTML file is meant to show the structure needed
+    // For actual testing, you'd need to modify your create-react-app setup to include the theme tester
+    
+    document.getElementById('root').innerHTML = `
+      <div style="padding: 20px; font-family: system-ui, sans-serif; text-align: center;">
+        <h1>Theme Tester Setup</h1>
+        <p>This HTML file is a placeholder. For local development:</p>
+        <ol style="text-align: left; max-width: 600px; margin: 0 auto;">
+          <li>Create a new component in your React application that imports the ThemeTester</li>
+          <li>Add a route to this component in your app's router</li>
+          <li>Run your React application with <code>npm start</code></li>
+          <li>Navigate to the theme tester route</li>
+        </ol>
+        <p style="margin-top: 20px;">See the README.md for more detailed instructions.</p>
+      </div>
+    `;
+  </script>
+</body>
+</html>

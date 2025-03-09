@@ -42,7 +42,17 @@ export const timeAllocationSlice = createSlice({
         if (newTotal !== 100) {
           const diff = 100 - newTotal;
           // Find the largest allocation to adjust
-          let largest = Object.keys(state).reduce((a, b) => state[a] > state[b] ? a : b);
+          const entries = Object.entries(state);
+          let largest = entries[0][0];
+          let largestValue = entries[0][1];
+          
+          for (let i = 1; i < entries.length; i++) {
+            const [key, value] = entries[i];
+            if (value > largestValue) {
+              largest = key;
+              largestValue = value;
+            }
+          }
           state[largest] += diff;
         }
       }

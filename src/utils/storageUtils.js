@@ -26,7 +26,7 @@ export const loadGameState = () => {
     if (savedState) {
       const parsedState = JSON.parse(savedState);
       // Convert date strings back to Date objects
-      if (parsedState.time && parsedState.time.date) {
+      if (parsedState?.time?.date) {
         parsedState.time.date = new Date(parsedState.time.date);
       }
       return parsedState;

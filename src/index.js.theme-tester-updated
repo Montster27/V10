@@ -1,0 +1,11 @@
+// /Users/montysharma/Documents/V10/simplified/src/index.js.theme-tester-updated
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import ThemeTester from './ui_test/ThemeTester';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <ThemeTester />
+  </React.StrictMode>
+);

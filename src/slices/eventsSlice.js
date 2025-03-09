@@ -1,6 +1,6 @@
 // /Users/montysharma/Documents/V10/simplified/src/slices/eventsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
-import { events, getAvailableEvents } from '../data/events';
+import { events } from '../data/events';
 
 const initialState = {
   active: [],
@@ -53,13 +53,12 @@ export const eventsSlice = createSlice({
       }
     },
     checkForEvents: (state, action) => {
-      const { day, resources, skills } = action.payload;
+      const { day } = action.payload;
       
       // Don't trigger new events if there are active ones
       if (state.active.length > 0) return;
       
       // Check for events that should trigger
-      const gameState = { day, resources, skills };
       const triggeredEvents = state.available.filter(event => 
         event.trigger.type === 'time' && event.trigger.day === day
       );

@@ -1,13 +1,16 @@
 // /Users/montysharma/Documents/V10/simplified/src/components/skills/SkillCategory.js
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box, Heading, SimpleGrid } from '@chakra-ui/react';
 import SkillCard from './SkillCard';
 
 function SkillCategory({ title, skills, unlocked, points, onUnlock }) {
   return (
-    <div className="skill-category">
-      <h3>{title}</h3>
-      <div className="skills-compact">
+    <Box mb={6}>
+      <Heading as="h3" size="sm" mb={3} pb={1} borderBottomWidth="1px" borderColor="gray.200">
+        {title}
+      </Heading>
+      <SimpleGrid columns={[1, null, 2]} spacing={3}>
         {skills.map(skill => (
           <SkillCard
             key={skill.id}
@@ -17,8 +20,8 @@ function SkillCategory({ title, skills, unlocked, points, onUnlock }) {
             onUnlock={() => onUnlock(skill.id)}
           />
         ))}
-      </div>
-    </div>
+      </SimpleGrid>
+    </Box>
   );
 }
 

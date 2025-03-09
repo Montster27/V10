@@ -11,7 +11,7 @@ export const GAME_START_DATE = '1983-09-01'; // Starting date
 export const RESOURCE_LIMITS = {
   energy: { min: 0, max: 100, initial: 100 },
   stress: { min: 0, max: 100, initial: 0 },
-  money: { min: 0, max: Infinity, initial: 500 },
+  money: { min: 0, max: Infinity, initial: 100 },
   knowledge: { min: 0, max: Infinity, initial: 0 },
   social: { min: 0, max: Infinity, initial: 50 },
 };
@@ -22,16 +22,19 @@ export const ACTIVITY_IMPACTS = {
     energy: -0.2,
     stress: 0.2,
     knowledge: 10,
-    social: -0.1,
+    social: -0.5,
   },
   work: {
     energy: -0.3,
-    stress: 0.3,
+    stress: 0.5,
     money: 5,
+    knowledge: 0.5,
   },
   social: {
     energy: -0.1,
-    stress: -0.1,
+    stress: -0.5,
+    money: -2,
+    knowledge: 0.5,
     social: 5,
   },
   rest: {
@@ -40,7 +43,8 @@ export const ACTIVITY_IMPACTS = {
   },
   exercise: {
     energy: -0.2,
-    stress: -0.2,
+    stress: -0.5,
+    social: 1,
   },
 };
 

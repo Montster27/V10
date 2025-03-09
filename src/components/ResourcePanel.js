@@ -1,6 +1,7 @@
 // /Users/montysharma/Documents/V10/simplified/src/components/ResourcePanel.js
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { Flex, Text, Box, Divider } from '@chakra-ui/react';
 import Panel from './ui/Panel';
 import ResourceBar from './ui/ResourceBar';
 
@@ -13,32 +14,32 @@ function ResourcePanel() {
         label="Energy" 
         value={resources.energy.current} 
         max={resources.energy.max}
-        className="resource-bar-energy"
       />
       
       <ResourceBar 
         label="Stress" 
         value={resources.stress.current} 
         max={resources.stress.max}
-        className="resource-bar-stress"
       />
       
-      <div className="resource-details" style={{fontSize: '14px', marginTop: '12px'}}>
-        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
-          <span>Money:</span>
-          <span style={{fontWeight: 'bold'}}>${Math.round(resources.money)}</span>
-        </div>
+      <Divider my={3} />
+      
+      <Box mt={3}>
+        <Flex justify="space-between" mb={2}>
+          <Text>Money:</Text>
+          <Text fontWeight="bold" color="money.500">${Math.round(resources.money)}</Text>
+        </Flex>
         
-        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
-          <span>Knowledge:</span>
-          <span style={{fontWeight: 'bold'}}>{Math.round(resources.knowledge)}</span>
-        </div>
+        <Flex justify="space-between" mb={2}>
+          <Text>Knowledge:</Text>
+          <Text fontWeight="bold" color="knowledge.500">{Math.round(resources.knowledge)}</Text>
+        </Flex>
         
-        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '6px'}}>
-          <span>Social:</span>
-          <span style={{fontWeight: 'bold'}}>{Math.round(resources.social)}</span>
-        </div>
-      </div>
+        <Flex justify="space-between" mb={2}>
+          <Text>Social:</Text>
+          <Text fontWeight="bold" color="social.500">{Math.round(resources.social)}</Text>
+        </Flex>
+      </Box>
     </Panel>
   );
 }

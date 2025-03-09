@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Box, Heading, Text, VStack, Badge, Flex } from '@chakra-ui/react';
 import { resolveEvent } from '../slices/eventsSlice';
 import { updateResources } from '../slices/resourcesSlice';
 import { setPaused } from '../slices/timeSlice';
@@ -26,38 +27,54 @@ function EventPanel({ event }) {
     }
   };
   
+  // Helper function to determine badge color based on resource
+  const getResourceColorScheme = (resource) => {
+    switch (resource.toLowerCase()) {
+      case 'energy': return 'energy';
+      case 'stress': return 'stress';
+      case 'money': return 'money';
+      case 'knowledge': return 'knowledge';
+      case 'social': return 'social';
+      default: return 'gray';
+    }
+  };
+  
   return (
     <Panel title="Current Event">
-      <div className="event-content">
-        <h3 className="event-title" style={{fontSize: '1.1rem', marginTop: '0'}}>{event.title}</h3>
-        <p className="event-description" style={{fontSize: '0.9rem', margin: '8px 0'}}>{event.description}</p>
+      <Box>
+        <Heading as="h3" size="sm" mb={2}>{event.title}</Heading>
+        <Text fontSize="sm" mb={4}>{event.description}</Text>
         
-        <div className="event-choices">
+        <VStack spacing={2} align="stretch">
           {event.choices.map(choice => (
             <Button
               key={choice.id}
               onClick={() => handleChoiceSelect(choice.id)}
-              className="event-choice"
-              style={{
-                marginTop: '8px', 
-                fontSize: '0.9rem',
-                display: 'block',
-                width: '100%',
-                textAlign: 'left',
-              }}
+              variant="outline"
+              justifyContent="flex-start"
+              height="auto"
+              py={3}
+              textAlign="left"
+              isFullWidth
             >
-              {choice.text}
-              <div className="choice-effects">
-                {Object.entries(choice.effects).map(([resource, value]) => (
-                  <span key={resource}>
-                    {resource.charAt(0).toUpperCase()}: {value > 0 ? '+' : ''}{Math.round(value)}
-                  </span>
-                ))}
-              </div>
+              <Box>
+                <Text mb={2}>{choice.text}</Text>
+                <Flex wrap="wrap" gap={2}>
+                  {Object.entries(choice.effects).map(([resource, value]) => (
+                    <Badge
+                      key={resource}
+                      colorScheme={getResourceColorScheme(resource)}
+                      variant={value >= 0 ? 'subtle' : 'solid'}
+                    >
+                      {resource}: {value > 0 ? '+' : ''}{Math.round(value)}
+                    </Badge>
+                  ))}
+                </Flex>
+              </Box>
             </Button>
           ))}
-        </div>
-      </div>
+        </VStack>
+      </Box>
     </Panel>
   );
 }

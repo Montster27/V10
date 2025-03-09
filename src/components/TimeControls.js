@@ -1,6 +1,7 @@
 // /Users/montysharma/Documents/V10/simplified/src/components/TimeControls.js
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Flex, Box, Text, useToast } from '@chakra-ui/react';
 import { togglePause } from '../slices/timeSlice';
 import { initializeGameLoop, saveGame } from '../services/gameLoop';
 import { formatDate } from '../utils/timeUtils';
@@ -11,6 +12,7 @@ function TimeControls() {
   const dispatch = useDispatch();
   const time = useSelector(state => state.time);
   const skills = useSelector(state => state.skills);
+  const toast = useToast();
   
   useEffect(() => {
     // Initialize game loop when the component mounts
@@ -27,44 +29,58 @@ function TimeControls() {
   const handleSaveGame = () => {
     const success = saveGame();
     if (success) {
-      alert('Game saved!');
+      toast({
+        title: 'Game saved',
+        status: 'success',
+        duration: 2000,
+        isClosable: true,
+        position: 'top'
+      });
     } else {
-      alert('Error saving game. Please try again.');
+      toast({
+        title: 'Save failed',
+        description: 'Error saving game. Please try again.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top'
+      });
     }
   };
   
   const formattedDate = formatDate(time.date);
   
   return (
-    <Panel style={{padding: '8px 12px', marginBottom: '15px'}}>
-      <div className="time-controls">
-        <div style={{flex: 1}}>
-          <div style={{display: 'flex', justifyContent: 'space-between'}}>
-            <span><strong>Day {time.day}</strong></span>
-            <span style={{fontSize: '0.9rem'}}>{formattedDate}</span>
-          </div>
-          <div style={{marginTop: '4px'}}>
-            Skill Points: {Math.round(skills.points)}
-          </div>
-        </div>
+    <Panel py={2} px={4} mb={4}>
+      <Flex align="center" justify="space-between">
+        <Box>
+          <Flex justify="space-between" width="100%">
+            <Text fontWeight="bold">Day {time.day}</Text>
+            <Text fontSize="sm" color="gray.600" ml={4}>{formattedDate}</Text>
+          </Flex>
+          <Text mt={1} fontSize="sm">
+            Skill Points: <Text as="span" fontWeight="medium">{Math.round(skills.points)}</Text>
+          </Text>
+        </Box>
         
-        <div style={{display: 'flex', gap: '8px'}}>
+        <Flex gap={2}>
           <Button 
             onClick={handleTogglePause}
-            primary={true}
-            size="small"
+            colorScheme="brand"
+            size="sm"
           >
             {time.paused ? 'Play' : 'Pause'}
           </Button>
           
           <Button 
             onClick={handleSaveGame}
-            size="small"
+            variant="outline"
+            size="sm"
           >
             Save
           </Button>
-        </div>
-      </div>
+        </Flex>
+      </Flex>
     </Panel>
   );
 }

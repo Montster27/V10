@@ -1,6 +1,7 @@
 // /Users/montysharma/Documents/V10/simplified/src/components/SkillsPanel.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { SimpleGrid } from '@chakra-ui/react';
 import { unlockSkill } from '../slices/skillsSlice';
 import { SKILL_CATEGORIES } from '../config/gameConstants';
 import Panel from './ui/Panel';
@@ -39,9 +40,12 @@ function SkillsPanel() {
     physical: 'Physical'
   };
   
+  // Create title with conditional points display
+  const panelTitle = points > 0 ? `Skills (${Math.round(points)} points)` : 'Skills';
+  
   return (
-    <Panel title={`Skills ${points > 0 ? `(${Math.round(points)} points)` : ''}`}>
-      <div className="skills-grid">
+    <Panel title={panelTitle}>
+      <SimpleGrid columns={[1, null, 3]} spacing={6}>
         {SKILL_CATEGORIES.map(category => (
           <SkillCategory 
             key={category}
@@ -52,7 +56,7 @@ function SkillsPanel() {
             onUnlock={handleUnlockSkill}
           />
         ))}
-      </div>
+      </SimpleGrid>
     </Panel>
   );
 }

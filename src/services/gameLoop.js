@@ -95,8 +95,6 @@ function processDayTick() {
   // 4. Check for events
   store.dispatch(checkForEvents({
     day: state.time.day + 1, // +1 because we already advanced the day
-    resources: state.resources,
-    skills: state.skills,
   }));
 }
 
